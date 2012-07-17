@@ -1,0 +1,342 @@
+offsite-backup (1.1.8-KUMIRELEASE1) stable; urgency=low
+
+  * Version bump for KUMIRELEASE, no changes
+
+ -- Pieter Lexis <pieter@kumina.nl>  Thu, 12 Jul 2012 15:37:42 +0200
+
+offsite-backup (1.1.7-KUMIRELEASE1) stable; urgency=low
+
+  * Use gzip's --rsyncable option for MySQL dumps. This should
+    speed up the whole backup process.
+  * Use gzip's -9 option for MySQL dumps. Smaller files are
+    better. 
+
+ -- Tim Stoop <tim@kumina.nl>  Wed, 15 Feb 2012 12:09:42 +0000
+
+offsite-backup (1.1.7-KUMIRELEASE0) stable; urgency=low
+
+  * Re-add the kumirelease in versioning.
+
+ -- Tim Stoop <tim@kumina.nl>  Mon, 19 Sep 2011 15:09:36 +0000
+
+offsite-backup (1.1.6) stable; urgency=low
+
+  * Make the postgresql script work on Squeeze.
+  * Make lintian errors disappear.
+
+ -- Tim Stoop <tim@kumina.nl>  Mon, 19 Sep 2011 13:56:21 +0000
+
+offsite-backup (1.1.5) stable; urgency=low
+
+  * Make splay work shell-independently.
+
+ -- Tim Stoop <tim@kumina.nl>  Fri, 12 Aug 2011 11:36:31 +0000
+
+offsite-backup (1.1.4) stable; urgency=low
+
+  * The MySQL script needed some more help.
+
+ -- Tim Stoop <tim@kumina.nl>  Mon, 14 Feb 2011 15:23:02 +0000
+
+offsite-backup (1.1.3) stable; urgency=low
+
+  * Remove net_buffer_length and max_allowed_packet from the 
+    mysqldump invokation. These can be set in your my.cnf for
+    section [mysqldump] if you need them different. Need them
+    removed from the script so we can override them for
+    several setups.
+
+ -- Tim Stoop <tim@kumina.nl>  Wed, 12 Jan 2011 21:07:00 +0000
+
+offsite-backup (1.1.2) stable; urgency=low
+
+  * Fix path in MySQL script.
+
+ -- Tim Stoop <tim@kumina.nl>  Tue, 04 Jan 2011 08:40:50 +0000
+
+offsite-backup (1.1.1) stable; urgency=low
+
+  * Fix mysql script. I hope.
+  * Remove recommends for backup-scripts.
+  * Fix some postinst troubles.
+
+ -- Tim Stoop <tim@kumina.nl>  Mon, 03 Jan 2011 15:21:55 +0000
+
+offsite-backup (1.1.0) stable; urgency=low
+
+  * Yet another fix to MySQL script.
+  * Move local-backup to offsite-backup source package.
+  * Create a separate backup-scripts package.
+  * Add myself to uploaders.
+  * All these changes warrant a version increase to 1.1.0.
+
+ -- Tim Stoop <tim@kumina.nl>  Mon, 03 Jan 2011 10:28:51 +0000
+
+offsite-backup (1.0.27) stable; urgency=low
+
+  * Increase MySQL script file creation permission security.
+  * Don't dump MySQL's information_schema database.
+  * Increase PostgreSQL script file creation permission security.
+
+ -- Tim Stoop <tim@kumina.nl>  Mon, 03 Jan 2011 09:08:18 +0000
+
+offsite-backup (1.0.26) stable; urgency=low
+
+  * Fix the postgresql script again... This time it's
+    tested!
+  * Increase net_buffer_length and max_allowed_packet
+    for the mysql script.
+
+ -- Tim Stoop <tim@kumina.nl>  Tue, 28 Dec 2010 08:50:16 +0000
+
+offsite-backup (1.0.25) stable; urgency=low
+
+  * Actually fix the postgresql script so it also works
+    with Postgresql 7.x by ignoring the template0 db.
+  * Make the MySQL backup script also backup on a per-db
+    basis.
+
+ -- Tim Stoop <tim@kumina.nl>  Thu, 23 Dec 2010 09:01:58 +0000
+
+offsite-backup (1.0.24) stable; urgency=low
+
+  * Make the postgresql dump script better. Now dumps per
+    database and in pgsql native format. More flexible.
+
+ -- Tim Stoop <tim@kumina.nl>  Mon, 20 Dec 2010 12:18:56 +0000
+
+offsite-backup (1.0.23) stable; urgency=low
+
+  * Since cron.d has different variables (e.g. PATH) some prepare
+    scripts had to be fixed (by Tim Stoop).
+  * Not including semaphore anymore since rdiff-backup has a
+    mechanism for this. 
+  * Extended default excludes with some common directories.
+
+ -- Kees Meijs <kees@kumina.nl>  Thu, 16 Dec 2010 11:13:08 +0100
+
+offsite-backup (1.0.22) stable; urgency=low
+
+  * Remove /etc/cron.daily/offsite-backup. 
+  * Lintian still complains about a missing manual page and
+    there's nu multilangual support yet. This needs fixing!
+  * Support for (some form of) a semaphore is needed.
+
+ -- Kees Meijs <kees@kumina.nl>  Fri, 10 Dec 2010 17:11:35 +0100
+
+offsite-backup (1.0.21) stable; urgency=low
+
+  * Set splay default to 28800 instead of 1800.
+  * Move job from cron.daily to cron.d.
+  * Ensure everything is stored per default, just exclude stuff.
+  * Remove /usr/share/offsite-backup/finish directory.
+  * Upgrade to standards version 3.9.1.
+  * Ensure postinst script bails out on errors.
+  * Lintian still complains about a missing manual page and
+    there's nu multilangual support yet. This needs fixing!
+  * Support for (some form of) a semaphore is needed.
+
+ -- Kees Meijs <kees@kumina.nl>  Fri, 10 Dec 2010 16:55:18 +0100
+
+offsite-backup (1.0.20) stable; urgency=low
+
+  * Don't force backups over IPv4, IPv6 works fine usually.
+
+ -- Tim Stoop <tim@kumina.nl>  Tue, 30 Nov 2010 13:50:18 +0000
+
+offsite-backup (1.0.19) stable; urgency=low
+
+  * Fix distribution string.
+
+ -- Tim Stoop <tim@kumina.nl>  Tue, 30 Nov 2010 13:20:05 +0000
+
+offsite-backup (1.0.18) kumina; urgency=low
+
+  * Add --net_buffer_length=1G and --max_allowed_packet=1G
+    options to mysqldump.
+
+ -- Kees Meijs <kees@kumina.nl>  Fri, 24 Jul 2009 10:25:49 +0200
+
+offsite-backup (1.0.17) kumina; urgency=low
+
+  * Compress MySQL back-ups per default.
+  * Check if PostgreSQL is running before making back-ups.
+
+ -- Kees Meijs <kees@kumina.nl>  Wed, 21 Jan 2009 09:24:35 +0100
+
+offsite-backup (1.0.16) kumina; urgency=low
+
+  * Fix stupid mistake in previous change to the PostgreSQL dump script.
+
+ -- Bart Cortooms <bart@kumina.nl>  Sun, 28 Dec 2008 12:22:06 +0100
+
+offsite-backup (1.0.15) kumina; urgency=low
+
+  * Add a finish.d directory, which contains scripts which will be called when
+    the backup script finishes.
+  * Compress the PostgreSQL dump.
+
+ -- Bart Cortooms <bart@kumina.nl>  Sat, 27 Dec 2008 19:22:10 +0100
+
+offsite-backup (1.0.14) kumina; urgency=low
+
+  * Exit with exit status 0 in the MySQL prepare script.
+
+ -- Bart Cortooms <bart@kumina.nl>  Mon,  1 Sep 2008 10:52:26 +0200
+
+offsite-backup (1.0.13) kumina; urgency=low
+
+  * Specify the number of backup sessions to keep, instead of an amount of
+    time.  Because rdiff-backup only removes one session at a time unless
+    --force is used, this removes the need to manually do forced cleanups when
+    a second session is just inside the specified time range.
+  * Disable splay by default for interactive use.  Only enable it when
+    --enable-splay is explicitely passed to the command.
+  * Set a default for REMOVE_OLDER_THAN (60 backup sessions.)
+  * Make the MySQL backup prepare script a bit prettier.
+  * Fix prepare script for Trac to no longer exit with an error status.
+    This assumes trac-admin properly outputs its error messages to stderr
+    instead of stdout, which is the case for newer versions of Trac.
+  * Improve logging output.
+
+ -- Bart Cortooms <bart@kumina.nl>  Sun, 31 Aug 2008 14:35:44 +0200
+
+offsite-backup (1.0.12) kumina; urgency=low
+
+  * Add the -f switch to MySQL backups. 
+
+ -- Tim Stoop <tim@kumina.nl>  Mon, 28 Jul 2008 11:00:27 +0200
+
+offsite-backup (1.0.11) kumina; urgency=low
+
+  * Make the MySQL script check if the MySQL daemon is running.
+
+ -- Tim Stoop <tim@kumina.nl>  Thu, 24 Jul 2008 10:06:31 +0200
+
+offsite-backup (1.0.10) kumina; urgency=low
+
+  * Add a --force option.
+  * Change the default location of the SSH key to /etc/backup/ssh_key.
+
+ -- Bart Cortooms <bart@kumina.nl>  Mon, 23 Jun 2008 11:22:42 +0200
+
+offsite-backup (1.0.9) kumina; urgency=low
+
+  * Add a --no-splay option.
+
+ -- Bart Cortooms <bart@kumina.nl>  Tue, 17 Jun 2008 11:45:53 +0200
+
+offsite-backup (1.0.8) kumina; urgency=low
+
+  * Introduce a splay option - a random time to sleep before connecting to the
+    backup server.
+  * Add some logging statements.
+
+ -- Bart Cortooms <bart@kumina.nl>  Sun, 15 Jun 2008 10:17:53 +0200
+
+offsite-backup (1.0.7) kumina; urgency=low
+
+  * Allow the location of the SVN repositories and Trac environments to be
+    configured.
+  * Adapt script to reduce trac-admin output for newer Trac versions.
+
+ -- Bart Cortooms <bart@kumina.nl>  Tue,  6 May 2008 09:09:30 +0200
+
+offsite-backup (1.0.6) kumina; urgency=low
+
+  * Change log location from /var/log/backup.log to
+    /var/log/offsite-backup.log.
+
+ -- Bart Cortooms <bart@kumina.nl>  Mon,  5 May 2008 14:57:46 +0200
+
+offsite-backup (1.0.5) kumina; urgency=low
+
+  * Fix path for the prepare scripts in the default config.
+
+ -- Bart Cortooms <bart@kumina.nl>  Mon,  5 May 2008 14:07:57 +0200
+
+offsite-backup (1.0.4) kumina; urgency=low
+
+  * Fix MySQL backup script.  Reported by Kees Meijs.
+
+ -- Bart Cortooms <bart@kumina.nl>  Thu, 13 Mar 2008 16:10:15 +0100
+
+offsite-backup (1.0.3) kumina; urgency=low
+
+  * Fix various lintian errors and warnings.
+  * Fix script for saving the partitioning table.
+
+ -- Bart Cortooms <bart@kumina.nl>  Mon,  3 Mar 2008 10:07:19 +0100
+
+offsite-backup (1.0.2-1) kumina; urgency=low
+
+  * Add a script to save the size and disk space usage of currently mounted
+    filesystems
+  * Add a script to save the layout of all partitions
+  * Fix comment in /etc/backup/prepare.d/README to reflect the new
+    location of the included scripts.
+
+ -- Bart Cortooms <bart@kumina.nl>  Mon, 25 Feb 2008 14:59:09 +0100
+
+offsite-backup (1.0.1-1) kumina; urgency=low
+
+  * Add a prepare script to backup the output of dpkg -l
+
+ -- Bart Cortooms <bart@kumina.nl>  Mon, 25 Feb 2008 14:31:02 +0100
+
+offsite-backup (1.0.0-9) kumina; urgency=low
+
+  * Cleanup backup scripts
+  * Move architecture-independent scripts to /usr/share/offsite-backup
+  * Exclude /var/lib/xen/save by default
+
+ -- Bart Cortooms <bart@kumina.nl>  Sun, 24 Feb 2008 16:40:29 +0100
+
+offsite-backup (1.0.0-8) UNRELEASED; urgency=low
+
+  * Fix MySQL script comment and directory permissions
+
+ -- Bart Cortooms <bart@kumina.nl>  Sun, 24 Feb 2008 16:34:19 +0100
+
+offsite-backup (1.0.0-7) UNRELEASED; urgency=low
+
+  * Change maintainer address
+  * Add copyright notice
+
+ -- Bart Cortooms <bart@kumina.nl>  Sun, 24 Feb 2008 16:21:28 +0100
+
+offsite-backup (1.0.0-6) UNRELEASED; urgency=low
+
+  * Include MySQL dump prepare script
+
+ -- Tim Stoop <tim@kumina.nl>  Thu, 25 Oct 2007 14:45:54 +0200
+
+offsite-backup (1.0.0-5) UNRELEASED; urgency=low
+
+  * Include /home by default in the backup 
+
+ -- Bart Cortooms <bart@cidev.nl>  Fri,  1 Jun 2007 20:38:21 +0200
+
+offsite-backup (1.0.0-4) UNRELEASED; urgency=low
+
+  * 'nice +15' the offsite-backup process 
+
+ -- Bart Cortooms <bart@cidev.nl>  Fri,  1 Jun 2007 20:22:18 +0200
+
+offsite-backup (1.0.0-3) UNRELEASED; urgency=low
+
+  * debconf-ize the configuration
+
+ -- Bart Cortooms <bart@cidev.nl>  Fri,  1 Jun 2007 17:46:11 +0200
+
+offsite-backup (1.0.0-2) UNRELEASED; urgency=low
+
+  * Allow a different SSH key to be selected. 
+
+ -- Bart Cortooms <bart@cidev.nl>  Fri, 11 May 2007 15:21:50 +0200
+
+offsite-backup (1.0.0-1) UNRELEASED; urgency=low
+
+  * Initial release.
+
+ -- Bart Cortooms <bart@cidev.nl>  Thu, 10 May 2007 00:13:53 +0200

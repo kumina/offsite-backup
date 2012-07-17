@@ -1,0 +1,42 @@
+#!/bin/sh
+
+# Bail out on errors.
+set -e
+
+action="$1"
+oldversion="$2"
+
+. /usr/share/debconf/confmodule
+db_version 2.0
+
+umask 022
+
+if [ "$action" != configure ]; then
+	exit 0
+fi
+
+db_get local-backup/destination_path
+if [ "$RET" != "" ]; then
+	BACKUP_DIR="$RET"
+fi
+
+newconfig=`mktemp`
+sed "s,^BACKUP_DIR[^#]\+,BACKUP_DIR=$BACKUP_DIR,g" < /etc/backup/local-backup.conf > "$newconfig"
+
+# Make sure the permissions on the configuration file are not changed.
+cp "$newconfig" /etc/backup/local-backup.conf
+rm "$newconfig"
+
+# We link to the backup-scripts directory to ensure backwards compatibility.
+# After we make sure no old stuff is left.
+if [ -e /usr/share/local-backup ]; then
+	rm -Rf /usr/share/local-backup
+fi
+
+ln -s /usr/share/backup-scripts /usr/share/local-backup
+
+#DEBHELPER#
+
+db_stop
+
+exit 0

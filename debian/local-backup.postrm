@@ -1,0 +1,10 @@
+#!/bin/sh
+
+set -e
+
+# Remove the symlink to backup-scripts
+if [ -h /usr/share/local-backup ]; then
+  rm -f /usr/share/local-backup
+fi
+
+#DEBHELPER#

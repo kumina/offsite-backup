@@ -1,0 +1,7 @@
+/var/log/offsite-backup.log {
+	rotate 4
+	weekly
+	compress
+	missingok
+	notifempty
+}

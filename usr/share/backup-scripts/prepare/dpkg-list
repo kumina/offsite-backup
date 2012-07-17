@@ -1,0 +1,6 @@
+#!/bin/sh
+#
+# Listing of all installed (and removed) packages.
+
+/usr/bin/dpkg --get-selections > /var/backups/dpkg.list
+/usr/bin/dpkg -l > /var/backups/dpkg-package-versions.list

@@ -1,0 +1,7 @@
+etc/backup/includes
+etc/backup/excludes
+etc/backup/prepare.conf.d
+etc/backup/prepare.d
+etc/backup/finish.conf.d
+etc/backup/finish.d
+usr/share/backup-scripts/prepare

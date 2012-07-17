@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Save the size and usage of currently mounted filesystems
+
+/bin/df -l -x udev -x tmpfs > /var/backups/filesystems-df.txt

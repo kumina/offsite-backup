@@ -1,0 +1,124 @@
+#!/bin/sh
+#
+# Daily local backups (adapted offsite-backup version for
+# local storage, e.g. via NFS).
+#
+# Bart Cortooms <bart@kumina.nl>, Kumina, 2005-2008.
+# Kees Meijs <kees@kumina.nl>, Kumina, 2010.
+#
+
+# Default configuration settings
+VERBOSITY=1
+BACKUP_DIR=/var/backups/$(hostname -f)
+LOG=/var/log/local-backup.log
+PREPARE=/etc/backup/prepare.d
+INCLUDE_PATTERNS=/etc/backup/includes
+EXCLUDE_PATTERNS=/etc/backup/excludes
+REMOVE_OLDER_THAN=60B
+SPLAY=0
+
+# Read the configuration
+. /etc/backup/local-backup.conf
+
+alias rdiff-backup="rdiff-backup --terminal-verbosity $VERBOSITY"
+destination="$BACKUP_DIR"
+
+usage ()
+{
+	echo "Usage: local-backup [--force] [--enable-splay]"
+	echo "       local-backup cleanup [--enable-splay]"
+	echo "       local-backup repair"
+}
+
+# Remove increments older than $REMOVE_OLDER_THAN.
+cleanup ()
+{
+	echo -e "\n[$(date)] Removing backups older than $REMOVE_OLDER_THAN" >> "$LOG"
+	extra_opts="$1"
+	if [ -n "$REMOVE_OLDER_THAN" ]; then
+		rdiff-backup $extra_opts --remove-older-than "$REMOVE_OLDER_THAN" \
+		              "$destination" 2>&1 | tee -a "$LOG"
+	fi
+}
+
+# If the last backup was interrupted, repair will remove it.
+repair ()
+{
+	rdiff-backup --force --check-destination-dir "$destination" 2>&1 | tee -a "$LOG"
+}
+
+cleanup=0
+repair=0
+enable_splay=0
+
+if [ "$1" = "cleanup" ]; then
+	shift
+	cleanup=1
+elif [ "$1" = "repair" ]; then
+        shift
+	repair=1
+fi
+
+args=$(getopt -n local-backup -o hfs -l help,force,enable-splay -- $*)
+
+if [ $? != 0 ]; then
+	echo
+	usage
+	exit 2
+fi
+
+set -- $args
+
+for a; do
+        case "$a" in
+                -h|--help)
+			usage
+                        exit 1;;
+                -s|--enable-splay)
+			enable_splay=1
+                        shift;;
+		-f|--force)
+                        extra_opts="--force"
+                        shift;;
+                --)
+                        shift; break;;
+        esac
+done
+
+if [ $enable_splay -eq 1 ] && [ $SPLAY -ne 0 ]; then
+        if [ ! -f /usr/bin/hexdump ]; then
+                echo "The application hexdump is needed for splay. Continuing without splay."
+        fi
+        # Sleep for a random amount of seconds, but no longer than $SPLAY seconds.
+        random=`/usr/bin/hexdump -n 2 -e '/2 "%u"' /dev/urandom`
+        sleeptime=$((random%$SPLAY))
+	echo "[$(date)] Sleeping for $sleeptime seconds" >> "$LOG"
+	sleep $sleeptime
+fi
+
+if [ $cleanup -eq 1 ]; then
+	cleanup --force; exit
+elif [ $repair -eq 1 ]; then
+	repair; exit
+fi
+
+echo -e "\n[$(date)] Starting backup" >> "$LOG"
+
+# Execute the backup prepare scripts.
+echo "[$(date)] Running backup prepare scripts" >> "$LOG"
+test -d "$PREPARE" && run-parts -u 077 "$PREPARE"
+
+rdiff-backup $extra_opts \
+             --exclude-device-files \
+             --exclude "$LOG" \
+             --exclude-globbing-filelist "$EXCLUDE_PATTERNS" \
+             --include-globbing-filelist "$INCLUDE_PATTERNS" \
+             --exclude '**' / "$destination" 2>&1 | tee -a "$LOG"
+
+cleanup
+
+# Execute the backup finish scripts.
+echo "[$(date)] Running backup finish scripts" >> "$LOG"
+test -d "$FINISH" && run-parts -u 077 "$FINISH"
+
+echo -e "\n[$(date)] Finished backup" >> "$LOG"

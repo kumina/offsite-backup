@@ -1,0 +1,6 @@
+Template: local-backup/destination_path
+Type: string
+Default: /var/backups
+Description: Directory where the backups should be stored:
+ Please specify the directory where the backups for this
+ client should be stored.

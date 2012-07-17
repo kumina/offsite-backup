@@ -1,0 +1,40 @@
+.\"                                      Hey, EMACS: -*- nroff -*-
+.\" First parameter, NAME, should be all caps
+.\" Second parameter, SECTION, should be 1-8, maybe w/ subsection
+.\" other parameters are allowed: see man(7), man(1)
+.TH OFFSITE-BACKUP 1 "September 19, 2011"
+.\" Please adjust this date whenever revising the manpage.
+.\"
+.\" Some roff macros, for reference:
+.\" .nh        disable hyphenation
+.\" .hy        enable hyphenation
+.\" .ad l      left justify
+.\" .ad b      justify to both left and right margins
+.\" .nf        disable filling
+.\" .fi        enable filling
+.\" .br        insert line break
+.\" .sp <n>    insert n+1 empty lines
+.\" for manpage-specific macros, see man(7)
+.SH NAME
+offsite-backup \- wrapper script for rdiff-backup when using a remote server
+.SH SYNOPSIS
+.B offsite-backup
+.SH DESCRIPTION
+This manual page documents briefly the
+.B offsite-backup
+command.
+.PP
+.\" TeX users may be more comfortable with the \fB<whatever>\fP and
+.\" \fI<whatever>\fP escape sequences to invode bold face and italics,
+.\" respectively.
+\fBoffsite-backup\fP is a wrapper script for rdiff-backup that allows for a slightly easier interface to rdiff-backup. It also adds features like splay.
+.SH OPTIONS
+Please see the config file in /etc/backup/offsite-backup.conf. It contains a lot of comments.
+.SH SEE ALSO
+.BR rdiff-backup (1).
+.br
+.SH AUTHOR
+offsite-backup was written by Kumina bv employees.
+.PP
+This manual page was written by Tim Stoop <tim@kumina.nl>,
+for the Debian project (and may be used by others).

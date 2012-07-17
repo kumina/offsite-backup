@@ -1,0 +1,22 @@
+#!/bin/bash
+#
+# Make a dump of all PostgreSQL databases.
+
+# Only do the dump when PostgreSQL is running
+pidof postgres > /dev/null || pidof postmaster > /dev/null || exit 0
+
+set -e
+
+# Set a secure umask
+umask 027
+
+rm -rf /var/backups/postgresql
+mkdir /var/backups/postgresql
+chmod 700 /var/backups/postgresql
+chown postgres:postgres /var/backups/postgresql
+DBS=`/bin/su postgres -c '/usr/bin/psql -l' | /bin/grep -e '^ [a-z]' | /usr/bin/awk '{print $1}'`
+for db in $DBS; do
+  if [ ! "$db" == "template0" ]; then
+    /bin/su postgres -c "pg_dump --clean --format=c $db" > /var/backups/postgresql/pgsql_$db.psql
+  fi
+done

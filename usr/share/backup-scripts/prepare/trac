@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# Make a snapshot of the Trac projects databases
+
+source /etc/backup/offsite-backup.conf
+source "$PREPARE_CONF"/trac.conf
+
+rm -rf /var/backups/trac
+mkdir /var/backups/trac
+cd "$TRAC_DIR"
+for project in *; do
+	trac-admin "$project" hotcopy "/var/backups/trac/$project" >/dev/null
+done

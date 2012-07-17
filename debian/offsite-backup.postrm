@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+# Remove the symlink to backup-scripts
+if [ -h /usr/share/offsite-backup ]; then
+  rm -f /usr/share/offsite-backup
+fi
+
+
+#DEBHELPER#

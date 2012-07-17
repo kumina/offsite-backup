@@ -1,0 +1,18 @@
+Template: offsite-backup/destination_user
+Type: string
+Default: backup
+_Description: SSH username:
+ Please specify the username which SSH can use to connect to the backup server.
+
+Template: offsite-backup/destination_hostname
+Type: string
+Default: backup
+_Description: Backup server hostname:
+ Please specify the hostname of the backup server which SSH can connect to.
+
+Template: offsite-backup/destination_path
+Type: string
+Default: /var/backups
+_Description: Directory where the backups should be stored:
+ Please specify the directory on the backup server where the backups for this
+ client should be stored.

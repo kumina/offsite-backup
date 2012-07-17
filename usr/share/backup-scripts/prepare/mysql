@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# Make a dump of all MySQL databases.
+
+# Only do the dump when MySQL is running
+/etc/init.d/mysql status > /dev/null || exit 0
+
+set -e
+
+# Secure umask
+umask 027
+
+# Remove old backups completely.
+rm -rf /var/backups/mysql
+# Create a new directory for the backups.
+mkdir /var/backups/mysql
+
+# Get the databases defined in MySQL. Disregard the information_schema database.
+DBS=`/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e "show databases\G" \
+     | /bin/grep -v ^* | /usr/bin/awk '{print $2}' | /bin/grep -v ^information_schema$`
+
+# Actually backup each database.
+for db in $DBS; do
+/usr/bin/mysqldump --defaults-file=/etc/mysql/debian.cnf --routines --opt \
+	--force --quote-names --quick $db | gzip -9 --rsyncable > /var/backups/mysql/$db.sql.gz
+done

@@ -1,0 +1,40 @@
+Source: offsite-backup
+Section: utils
+Priority: optional
+Maintainer: Kees Meijs <kees@kumina.nl>
+Uploaders: Tim Stoop <tim@kumina.nl>
+Standards-Version: 3.9.1
+Build-Depends: debhelper (>= 5.0)
+
+Package: backup-scripts
+Architecture: all
+Depends: ${misc:Depends}
+Conflicts: offsite-backup (<< 1.1), local-backup (<< 1.1)
+Description: Set of scripts to help backups
+ These scripts are used by offsite-backup and local-backup to prepare the actual
+ dumps and the like for the backup. It also contains scripts to gather general
+ information from a system which should help in rebuilding the machine.
+
+Package: offsite-backup
+Architecture: all
+Depends: rdiff-backup, python-pylibacl, python-pyxattr, debconf, ${misc:Depends}, backup-scripts
+Description: Set up off-site backups
+ offsite-backup allows you to quickly set up a working configuration for
+ backups to an off-site backup server.  It provides very little functionality
+ by itself - almost everything comes from its of rdiff-backup.  rdiff-backup is
+ the software which does the actual backups.  Offsite-backup just acts as a
+ simple wrapper for rdiff-backup and lets you configure the backup settings in
+ a configuration file.
+
+Package: local-backup
+Architecture: all
+Depends: rdiff-backup, python-pylibacl, python-pyxattr, debconf, ${misc:Depends}, backup-scripts
+Description: Set up local backups
+ Local-backup allows you to quickly set up a working configuration for
+ backups to a local location.  It provides very little functionality
+ by itself - almost everything comes from its of rdiff-backup.  rdiff-backup is
+ the software which does the actual backups. Local-backup just acts as a
+ simple wrapper for rdiff-backup and lets you configure the backup settings in
+ a configuration file.
+ .
+ This package is actually a fork of offsite-backup, for local usage.

@@ -1,0 +1,63 @@
+#!/bin/sh
+
+# Bail out on errors.
+set -e
+
+action="$1"
+oldversion="$2"
+
+. /usr/share/debconf/confmodule
+db_version 2.0
+
+umask 022
+
+if [ "$action" != configure ]; then
+	exit 0
+fi
+
+db_get offsite-backup/destination_user
+if [ "$RET" != "" ]; then
+	BACKUP_USER="$RET"
+fi
+
+db_get offsite-backup/destination_hostname
+if [ "$RET" != "" ]; then
+	BACKUP_SERVER="$RET"
+fi
+
+db_get offsite-backup/destination_path
+if [ "$RET" != "" ]; then
+	BACKUP_DIR="$RET"
+fi
+
+newconfig=`mktemp`
+sed "s,^BACKUP_SERVER=[^#]\+,BACKUP_SERVER=$BACKUP_SERVER,g;
+     s,^BACKUP_USER=[^#]\+,BACKUP_USER=$BACKUP_USER,g;
+     s,^BACKUP_DIR[^#]\+,BACKUP_DIR=$BACKUP_DIR,g" < /etc/backup/offsite-backup.conf > "$newconfig"
+
+# Make sure the permissions on the configuration file are not changed.
+cp "$newconfig" /etc/backup/offsite-backup.conf
+rm "$newconfig"
+
+eval $(grep ^SSH_PRIVATE_KEY /etc/backup/offsite-backup.conf)
+
+if [ ! -f "$SSH_PRIVATE_KEY" ]; then
+	ssh-keygen -q -N '' -t rsa -f "$SSH_PRIVATE_KEY"
+fi
+
+# If old /etc/cron.daily/offsite-backup file is left-over, remove it!
+[ -f /etc/cron.daily/offsite-backup ] && rm /etc/cron.daily/offsite-backup
+
+# For backwards compatibility, we make symlinks to the backup-scripts directory.
+# After we make sure there's no directory left.
+if [ -e /usr/share/offsite-backup ]; then
+	rm -Rf /usr/share/offsite-backup
+fi
+
+ln -s /usr/share/backup-scripts /usr/share/offsite-backup
+
+#DEBHELPER#
+
+db_stop
+
+exit 0

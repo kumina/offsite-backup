@@ -1,0 +1,7 @@
+This directory contains scripts which need to be run before the actual backup
+is made.  Scripts are run with run-parts(8).
+
+To enable a script, link it from /usr/share/offsite-backup or create your own
+script here and make it executable.  Analogously, to disable a script, remove
+the link if it's a link, or remove the executable bit from the file permissions
+if it's a custom script.

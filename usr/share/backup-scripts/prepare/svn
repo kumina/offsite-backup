@@ -1,0 +1,13 @@
+#!/bin/sh -e
+#
+# Create snapshots of the Subversion repositories
+
+source /etc/backup/offsite-backup.conf
+source "$PREPARE_CONF"/svn.conf
+
+rm -rf /var/backups/svn
+mkdir /var/backups/svn
+cd "$SVN_DIR"
+for repository in *; do
+	svnadmin hotcopy "$repository" "/var/backups/svn/$repository"
+done

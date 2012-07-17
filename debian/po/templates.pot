@@ -1,0 +1,59 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: offsite-backup@packages.debian.org\n"
+"POT-Creation-Date: 2011-09-19 14:09+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Type: string
+#. Description
+#: ../offsite-backup.templates:1001
+msgid "SSH username:"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../offsite-backup.templates:1001
+msgid ""
+"Please specify the username which SSH can use to connect to the backup "
+"server."
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../offsite-backup.templates:2001
+msgid "Backup server hostname:"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../offsite-backup.templates:2001
+msgid ""
+"Please specify the hostname of the backup server which SSH can connect to."
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../offsite-backup.templates:3001
+msgid "Directory where the backups should be stored:"
+msgstr ""
+
+#. Type: string
+#. Description
+#: ../offsite-backup.templates:3001
+msgid ""
+"Please specify the directory on the backup server where the backups for this "
+"client should be stored."
+msgstr ""

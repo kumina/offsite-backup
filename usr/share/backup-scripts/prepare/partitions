@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# Save a listing and the layout of all partitions on all block devices
+
+/bin/ls /sys/block | /bin/grep -Ev '^ram[0-9]+' | /bin/grep -Ev '^loop[0-9]+' | /bin/grep -Ev '^dm-[0-9]+' | while read blockdev; do
+	# Do not save partition tables for removable devices.  Usually these
+	# are CD-ROM drives, in which case we don't want to save a partitioning
+	# table.  The devices can also be external USB hard disks though, in
+	# which case it's less clear if the partitioning table is important.
+	if /bin/grep -q '^0$' /sys/block/$blockdev/removable; then
+		/sbin/sfdisk -d /dev/$blockdev > /var/backups/partitions.txt 2>&1
+	fi
+done
