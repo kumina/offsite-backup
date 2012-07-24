@@ -1,3 +1,9 @@
+offsite-backup (1.1.9-KUMIRELEASE1) stable; urgency=low
+
+  * Add a small patch by Keey Meijs that de-noises the postgresql prepare script.
+
+ -- Pieter Lexis <pieter@kumina.nl>  Tue, 24 Jul 2012 10:56:49 +0200
+
 offsite-backup (1.1.8-KUMIRELEASE1) stable; urgency=low
 
   * Version bump for KUMIRELEASE, no changes

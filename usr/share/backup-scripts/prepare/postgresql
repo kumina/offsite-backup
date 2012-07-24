@@ -7,6 +7,9 @@ pidof postgres > /dev/null || pidof postmaster > /dev/null || exit 0
 
 set -e
 
+# Go away from /root to quiet the script
+cd /tmp
+
 # Set a secure umask
 umask 027
 
