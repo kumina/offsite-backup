@@ -1,0 +1,46 @@
+                                                                  OFFSITE BACKUP
+================================================================================
+Offsite backup is a collection of scripts that wraps the RDiffBackup program
+into a more complete backup solution. It features prepare scripts (e.g. to dump
+MySQL databases).
+
+                                                                    DEPENDENCIES
+--------------------------------------------------------------------------------
+The runtime dependencies are:
+ - rdiff-backup
+ - python-pylibacl
+ - python-pyxattr
+
+When building, only debhelper is required.
+
+                                                              BUILDING  PACKAGES
+--------------------------------------------------------------------------------
+Run 'dpkg-buildpackage' in the root of this directory. This creates 3 packages:
+  - offsite-backup
+  - local-backup
+  - backup-scripts
+
+The first two contain the scripts to start rdiffbackup, the first one allows to
+backup to a remote server, where the second one (local-backup) backups to a
+local directory (possibly on an NFS-share). The backup-scripts package contains
+serveral prepare scripts. These should be symlinked from their installation di-
+rectory (/usr/share//backup-scripts/prepare/) to /etc/backup/prepare.d/. These
+script are then run before the backup is initiated.
+
+                                                                           USING
+--------------------------------------------------------------------------------
+ - Install either local- or offsite-backup.
+ - Symlink the needed prepare scripts.
+ - Configure it:
+  o /etc/backup/{includes,excludes} to in- and exclude files and directories
+  o /etc/backup/{offsite,local}-backup.conf (should be self-explanatory)
+ - It is cronned by default, by you can run it by hand.
+
+                                                                         LICENSE
+--------------------------------------------------------------------------------
+Copyright Kumina B.V.
+
+This package is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
