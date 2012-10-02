@@ -10,10 +10,13 @@ set -e
 # Secure umask
 umask 027
 
+# Create a new directory for the backups if it doesn't exist.
+[ -d /var/backups/mysql ] || mkdir -p /var/backups/mysql
+chown root:adm /var/backups/mysql
+chmod 2750 /var/backups/mysql
+
 # Remove old backups completely.
-rm -rf /var/backups/mysql
-# Create a new directory for the backups.
-mkdir /var/backups/mysql
+rm -rf /var/backups/mysql/*
 
 # Get the databases defined in MySQL. Disregard the information_schema database.
 DBS=`/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e "show databases\G" \

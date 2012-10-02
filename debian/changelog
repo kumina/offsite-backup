@@ -1,3 +1,9 @@
+offsite-backup (1.1.11-KUMIRELEASE1) stable; urgency=low
+
+  * Mysql backups are now group owned by 'adm'.
+
+ -- Thomas Ronner <thomas@kumina.nl>  Tue, 02 Oct 2012 12:40:09 +0200
+
 offsite-backup (1.1.10-KUMIRELEASE1) stable; urgency=low
 
   * Disregard the performance_schema database in MySQL, since we cannot dump it.
