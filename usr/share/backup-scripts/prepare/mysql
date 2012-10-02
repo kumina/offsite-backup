@@ -17,7 +17,8 @@ mkdir /var/backups/mysql
 
 # Get the databases defined in MySQL. Disregard the information_schema database.
 DBS=`/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e "show databases\G" \
-     | /bin/grep -v ^* | /usr/bin/awk '{print $2}' | /bin/grep -v ^information_schema$`
+     | /bin/grep -v ^* | /usr/bin/awk '{print $2}' | /bin/grep -v ^information_schema$ \
+     | /bin/grep -v ^performance_schema$`
 
 # Actually backup each database.
 for db in $DBS; do

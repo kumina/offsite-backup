@@ -1,6 +1,12 @@
+offsite-backup (1.1.10-KUMIRELEASE1) stable; urgency=low
+
+  * Disregard the performance_schema database in MySQL, since we cannot dump it.
+
+ -- Tim Stoop <tim@kumina.nl>  Tue, 02 Oct 2012 09:25:09 +0200
+
 offsite-backup (1.1.9-KUMIRELEASE1) stable; urgency=low
 
-  * Add a small patch by Keey Meijs that de-noises the postgresql prepare script.
+  * Add a small patch by Kees Meijs that de-noises the postgresql prepare script.
 
  -- Pieter Lexis <pieter@kumina.nl>  Tue, 24 Jul 2012 10:56:49 +0200
 
@@ -15,7 +21,7 @@ offsite-backup (1.1.7-KUMIRELEASE1) stable; urgency=low
   * Use gzip's --rsyncable option for MySQL dumps. This should
     speed up the whole backup process.
   * Use gzip's -9 option for MySQL dumps. Smaller files are
-    better. 
+    better.
 
  -- Tim Stoop <tim@kumina.nl>  Wed, 15 Feb 2012 12:09:42 +0000
 
