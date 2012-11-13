@@ -1,3 +1,11 @@
+offsite-backup (1.2.0-KUMIRELEASE0) stable; urgency=low
+
+  * Add a 'list' command to list all increments.
+  * Make the config actually a configfile, so it doesn't get overwritten on
+    upgrades.
+
+ -- Tim Stoop <tim@kumina.nl>  Fri, 02 Nov 2012 12:40:00 +0100
+
 offsite-backup (1.1.11-KUMIRELEASE1) stable; urgency=low
 
   * Mysql backups are now group owned by 'adm'.

@@ -1,2 +1,2 @@
 usr/bin/offsite-backup
-etc/backup/offsite-backup.conf
+etc/backup/offsite-backup.conf.example

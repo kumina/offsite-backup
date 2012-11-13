@@ -30,14 +30,18 @@ if [ "$RET" != "" ]; then
 	BACKUP_DIR="$RET"
 fi
 
-newconfig=`mktemp`
-sed "s,^BACKUP_SERVER=[^#]\+,BACKUP_SERVER=$BACKUP_SERVER,g;
-     s,^BACKUP_USER=[^#]\+,BACKUP_USER=$BACKUP_USER,g;
-     s,^BACKUP_DIR[^#]\+,BACKUP_DIR=$BACKUP_DIR,g" < /etc/backup/offsite-backup.conf > "$newconfig"
+# Only setup config if there's none.
+if [ ! -f /etc/backup/offsite-backup.conf ]; then
+	newconfig=`mktemp`
+	sed "s,^BACKUP_SERVER=[^#]\+,BACKUP_SERVER=$BACKUP_SERVER,g;
+	     s,^BACKUP_USER=[^#]\+,BACKUP_USER=$BACKUP_USER,g;
+	     s,^BACKUP_DIR[^#]\+,BACKUP_DIR=$BACKUP_DIR,g" < /etc/backup/offsite-backup.conf.example > "$newconfig"
 
-# Make sure the permissions on the configuration file are not changed.
-cp "$newconfig" /etc/backup/offsite-backup.conf
-rm "$newconfig"
+	# Make sure the permissions on the configuration file are not changed.
+	# Only setup config if there's none.
+	cat "$newconfig" > /etc/backup/offsite-backup.conf
+	rm "$newconfig"
+fi
 
 eval $(grep ^SSH_PRIVATE_KEY /etc/backup/offsite-backup.conf)
 

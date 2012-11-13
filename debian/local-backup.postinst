@@ -20,12 +20,15 @@ if [ "$RET" != "" ]; then
 	BACKUP_DIR="$RET"
 fi
 
-newconfig=`mktemp`
-sed "s,^BACKUP_DIR[^#]\+,BACKUP_DIR=$BACKUP_DIR,g" < /etc/backup/local-backup.conf > "$newconfig"
+# Only setup new config when there's no config setup yet
+if [ ! -f /etc/backup/local-backup.conf ]; then
+	newconfig=`mktemp`
+	sed "s,^BACKUP_DIR[^#]\+,BACKUP_DIR=$BACKUP_DIR,g" < /etc/backup/local-backup.conf > "$newconfig"
 
-# Make sure the permissions on the configuration file are not changed.
-cp "$newconfig" /etc/backup/local-backup.conf
-rm "$newconfig"
+	# Make sure the permissions on the configuration file are not changed.
+	cp "$newconfig" /etc/backup/local-backup.conf
+	rm "$newconfig"
+fi
 
 # We link to the backup-scripts directory to ensure backwards compatibility.
 # After we make sure no old stuff is left.

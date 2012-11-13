@@ -3,6 +3,8 @@
 # Daily offsite backups.
 #
 # Bart Cortooms <bart@kumina.nl>, Kumina, 2005-2008.
+# Tim Stoop <tim@kumina.nl>, Kumina, 2010-2012
+#
 
 # Default configuration settings
 VERBOSITY=1
@@ -28,6 +30,7 @@ usage ()
 	echo "Usage: offsite-backup [--force] [--enable-splay]"
 	echo "       offsite-backup cleanup [--enable-splay]"
 	echo "       offsite-backup repair"
+	echo "       offsite-backup list [--with-sizes]"
 }
 
 # Remove increments older than $REMOVE_OLDER_THAN.
@@ -47,8 +50,15 @@ repair ()
 	rdiff-backup --force --check-destination-dir "$destination" 2>&1 | tee -a "$LOG"
 }
 
+# List all increments
+list ()
+{
+	rdiff-backup --list-increments $extra_opts "$destination" 2>&1 | tee -a "$LOG"
+}
+
 cleanup=0
 repair=0
+list=0
 enable_splay=0
 
 if [ "$1" = "cleanup" ]; then
@@ -57,9 +67,12 @@ if [ "$1" = "cleanup" ]; then
 elif [ "$1" = "repair" ]; then
         shift
 	repair=1
+elif [ "$1" = "list" ]; then
+        shift
+	list=1
 fi
 
-args=$(getopt -n offsite-backup -o hfs -l help,force,enable-splay -- $*)
+args=$(getopt -n offsite-backup -o hfs -l help,force,enable-splay,with-sizes -- $*)
 
 if [ $? != 0 ]; then
 	echo
@@ -80,6 +93,9 @@ for a; do
 		-f|--force)
                         extra_opts="--force"
                         shift;;
+		--with-sizes)
+			extra_opts="--list-increment-sizes"
+			shift;;
                 --)
                         shift; break;;
         esac
@@ -100,6 +116,8 @@ if [ $cleanup -eq 1 ]; then
 	cleanup --force; exit
 elif [ $repair -eq 1 ]; then
 	repair; exit
+elif [ $list -eq 1 ]; then
+	list; exit
 fi
 
 echo -e "\n[$(date)] Starting backup" >> "$LOG"

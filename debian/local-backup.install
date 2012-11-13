@@ -1,2 +1,2 @@
 usr/bin/local-backup
-etc/backup/local-backup.conf
+etc/backup/local-backup.conf.example

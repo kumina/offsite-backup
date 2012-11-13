@@ -1,8 +1,7 @@
 Source: offsite-backup
 Section: utils
 Priority: optional
-Maintainer: Kees Meijs <kees@kumina.nl>
-Uploaders: Tim Stoop <tim@kumina.nl>
+Maintainer: Tim Stoop <tim@kumina.nl>
 Standards-Version: 3.9.1
 Build-Depends: debhelper (>= 5.0)
 
