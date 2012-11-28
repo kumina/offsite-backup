@@ -36,7 +36,7 @@ usage ()
 # Remove increments older than $REMOVE_OLDER_THAN.
 cleanup ()
 {
-	echo -e "\n[$(date)] Removing backups older than $REMOVE_OLDER_THAN" >> "$LOG"
+	echo "\n[$(date)] Removing backups older than $REMOVE_OLDER_THAN" >> "$LOG"
 	extra_opts="$1"
 	if [ -n "$REMOVE_OLDER_THAN" ]; then
 		rdiff-backup $extra_opts --remove-older-than "$REMOVE_OLDER_THAN" \
@@ -120,7 +120,7 @@ elif [ $list -eq 1 ]; then
 	list; exit
 fi
 
-echo -e "\n[$(date)] Starting backup" >> "$LOG"
+echo "\n[$(date)] Starting backup" >> "$LOG"
 
 # Execute the backup prepare scripts.
 echo "[$(date)] Running backup prepare scripts" >> "$LOG"
@@ -139,4 +139,4 @@ cleanup
 echo "[$(date)] Running backup finish scripts" >> "$LOG"
 test -d "$FINISH" && run-parts -u 077 "$FINISH"
 
-echo -e "\n[$(date)] Finished backup" >> "$LOG"
+echo "\n[$(date)] Finished backup" >> "$LOG"
