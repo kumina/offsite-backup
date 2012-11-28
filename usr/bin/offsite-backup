@@ -53,7 +53,7 @@ repair ()
 # List all increments
 list ()
 {
-	rdiff-backup --list-increments $extra_opts "$destination" 2>&1 | tee -a "$LOG"
+	rdiff-backup --list-increments $extra_opts "$destination"
 }
 
 cleanup=0
