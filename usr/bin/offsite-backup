@@ -18,8 +18,63 @@ SSH_PRIVATE_KEY=/etc/backup/ssh_key
 REMOVE_OLDER_THAN=60B
 SPLAY=0
 
+# Initialize
+cleanup=0
+repair=0
+list=0
+enable_splay=0
+config=/etc/backup/offsite-backup.conf
+
+# Get command line options
+if [ "$1" = "cleanup" ]; then
+	shift
+	cleanup=1
+elif [ "$1" = "repair" ]; then
+        shift
+	repair=1
+elif [ "$1" = "list" ]; then
+        shift
+	list=1
+fi
+
+args=$(getopt -u -n offsite-backup -o hfsc: -l help,force,enable-splay,with-sizes,config: -- $*)
+
+if [ $? != 0 ]; then
+	echo
+	usage
+	exit 2
+fi
+
+set -- $args
+
+for a; do
+        case "$a" in
+                -h|--help)
+			usage
+                        exit 1;;
+                -s|--enable-splay)
+			enable_splay=1
+                        shift;;
+		-f|--force)
+                        extra_opts="--force"
+                        shift;;
+		--with-sizes)
+			extra_opts="--list-increment-sizes"
+			shift;;
+		-c|--config)
+			config="$2"
+			shift 2;;
+                --)
+                        shift; break;;
+        esac
+done
+
 # Read the configuration
-. /etc/backup/offsite-backup.conf
+if [ ! -f "$config" ]; then
+	echo $0: ERROR: config file $config does not exist >&2
+	exit 1
+fi
+. $config
 
 alias rdiff-backup="rdiff-backup --terminal-verbosity $VERBOSITY \
    --remote-schema 'ssh -i $SSH_PRIVATE_KEY -C \%s rdiff-backup --server'"
@@ -27,10 +82,10 @@ destination="$BACKUP_USER@$BACKUP_SERVER::$BACKUP_DIR"
 
 usage ()
 {
-	echo "Usage: offsite-backup [--force] [--enable-splay]"
-	echo "       offsite-backup cleanup [--enable-splay]"
-	echo "       offsite-backup repair"
-	echo "       offsite-backup list [--with-sizes]"
+	echo "Usage: offsite-backup [--force] [--enable-splay] [--config /absolute/path/to/config.conf]"
+	echo "       offsite-backup cleanup [--enable-splay] [--config /absolute/path/to/config.conf]"
+	echo "       offsite-backup repair [--config /absolute/path/to/config.conf]"
+	echo "       offsite-backup list [--with-sizes] [--config /absolute/path/to/config.conf]"
 }
 
 # Remove increments older than $REMOVE_OLDER_THAN.
@@ -55,51 +110,6 @@ list ()
 {
 	rdiff-backup --list-increments $extra_opts "$destination"
 }
-
-cleanup=0
-repair=0
-list=0
-enable_splay=0
-
-if [ "$1" = "cleanup" ]; then
-	shift
-	cleanup=1
-elif [ "$1" = "repair" ]; then
-        shift
-	repair=1
-elif [ "$1" = "list" ]; then
-        shift
-	list=1
-fi
-
-args=$(getopt -n offsite-backup -o hfs -l help,force,enable-splay,with-sizes -- $*)
-
-if [ $? != 0 ]; then
-	echo
-	usage
-	exit 2
-fi
-
-set -- $args
-
-for a; do
-        case "$a" in
-                -h|--help)
-			usage
-                        exit 1;;
-                -s|--enable-splay)
-			enable_splay=1
-                        shift;;
-		-f|--force)
-                        extra_opts="--force"
-                        shift;;
-		--with-sizes)
-			extra_opts="--list-increment-sizes"
-			shift;;
-                --)
-                        shift; break;;
-        esac
-done
 
 if [ $enable_splay -eq 1 ] && [ $SPLAY -ne 0 ]; then
 	if [ ! -f /usr/bin/hexdump ]; then

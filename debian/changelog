@@ -1,3 +1,9 @@
+offsite-backup (1.3.0-KUMIRELEASE0) stable; urgency=low
+
+  * Add --config option to specify different configuration file.
+
+ -- Thomas Ronner <thomas@kumina.nl>  Fri, 28 Dec 2012 17:49:20 +0100
+
 offsite-backup (1.2.0-KUMIRELEASE1) stable; urgency=low
 
   * New package, since I forgot to update my repo last time...
