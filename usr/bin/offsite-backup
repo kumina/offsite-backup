@@ -25,6 +25,14 @@ list=0
 enable_splay=0
 config=/etc/backup/offsite-backup.conf
 
+usage ()
+{
+	echo "Usage: offsite-backup [--force] [--enable-splay] [--config /absolute/path/to/config.conf]"
+	echo "       offsite-backup cleanup [--enable-splay] [--config /absolute/path/to/config.conf]"
+	echo "       offsite-backup repair [--config /absolute/path/to/config.conf]"
+	echo "       offsite-backup list [--with-sizes] [--config /absolute/path/to/config.conf]"
+}
+
 # Get command line options
 if [ "$1" = "cleanup" ]; then
 	shift
@@ -79,14 +87,6 @@ fi
 alias rdiff-backup="rdiff-backup --terminal-verbosity $VERBOSITY \
    --remote-schema 'ssh -i $SSH_PRIVATE_KEY -C \%s rdiff-backup --server'"
 destination="$BACKUP_USER@$BACKUP_SERVER::$BACKUP_DIR"
-
-usage ()
-{
-	echo "Usage: offsite-backup [--force] [--enable-splay] [--config /absolute/path/to/config.conf]"
-	echo "       offsite-backup cleanup [--enable-splay] [--config /absolute/path/to/config.conf]"
-	echo "       offsite-backup repair [--config /absolute/path/to/config.conf]"
-	echo "       offsite-backup list [--with-sizes] [--config /absolute/path/to/config.conf]"
-}
 
 # Remove increments older than $REMOVE_OLDER_THAN.
 cleanup ()
