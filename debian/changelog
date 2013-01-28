@@ -10,6 +10,13 @@ offsite-backup (1.3.0-KUMIRELEASE0) stable; urgency=low
 
  -- Thomas Ronner <thomas@kumina.nl>  Fri, 28 Dec 2012 17:49:20 +0100
 
+offsite-backup (1.2.1-KUMIRELEASE0) stable; urgency=low
+
+  * List command no longer logs output to log.
+  * Remove invocation of 'echo -e' and replace with a normal 'echo'.
+
+ -- Tim Stoop <tim@kumina.nl>  Wed, 28 Nov 2012 09:31:18 +0100
+
 offsite-backup (1.2.0-KUMIRELEASE1) stable; urgency=low
 
   * New package, since I forgot to update my repo last time...
