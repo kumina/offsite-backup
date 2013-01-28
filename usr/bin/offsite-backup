@@ -136,6 +136,7 @@ echo "\n[$(date)] Starting backup" >> "$LOG"
 echo "[$(date)] Running backup prepare scripts" >> "$LOG"
 test -d "$PREPARE" && run-parts -u 077 "$PREPARE"
 
+echo "[$(date)] Starting rdiff-backup process to perform the backup" >> "$LOG"
 rdiff-backup $extra_opts \
              --exclude-device-files \
              --exclude "$LOG" \
