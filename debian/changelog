@@ -1,3 +1,9 @@
+offsite-backup (1.3.3-KUMIRELEASE0) stable; urgency=low
+
+  * Set max_allowed_packet for the MySQL dump to 1G, which is the max. This is always local so not a problem.
+
+ -- Tim Stoop <tim@kumina.nl>  Tue, 29 Jan 2013 09:54:19 +0100
+
 offsite-backup (1.3.2-KUMIRELEASE0) stable; urgency=low
 
   * Add a log entry once we start the rdiff-backup process.
