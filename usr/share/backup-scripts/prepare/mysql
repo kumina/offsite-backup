@@ -26,5 +26,6 @@ DBS=`/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e "show databases\G" 
 # Actually backup each database.
 for db in $DBS; do
 /usr/bin/mysqldump --defaults-file=/etc/mysql/debian.cnf --routines --opt --max-allowed-packet=1G \
-	--force --quote-names --quick $db | gzip -9 --rsyncable > /var/backups/mysql/$db.sql.gz
+	--ignore-table=mysql.events --force --quote-names --quick $db | \
+	/bin/gzip -9 --rsyncable > /var/backups/mysql/$db.sql.gz
 done
