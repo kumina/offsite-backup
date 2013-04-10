@@ -23,7 +23,7 @@ fi
 # Only setup new config when there's no config setup yet
 if [ ! -f /etc/backup/local-backup.conf ]; then
 	newconfig=`mktemp`
-	sed "s,^BACKUP_DIR[^#]\+,BACKUP_DIR=$BACKUP_DIR,g" < /etc/backup/local-backup.conf > "$newconfig"
+	sed "s,^BACKUP_DIR[^#]\+,BACKUP_DIR=$BACKUP_DIR,g" < /etc/backup/local-backup.conf.example > "$newconfig"
 
 	# Make sure the permissions on the configuration file are not changed.
 	cp "$newconfig" /etc/backup/local-backup.conf
