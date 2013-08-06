@@ -6,28 +6,10 @@ set -e
 action="$1"
 oldversion="$2"
 
-. /usr/share/debconf/confmodule
-db_version 2.0
-
 umask 022
 
 if [ "$action" != configure ]; then
 	exit 0
-fi
-
-db_get offsite-backup/destination_user
-if [ "$RET" != "" ]; then
-	BACKUP_USER="$RET"
-fi
-
-db_get offsite-backup/destination_hostname
-if [ "$RET" != "" ]; then
-	BACKUP_SERVER="$RET"
-fi
-
-db_get offsite-backup/destination_path
-if [ "$RET" != "" ]; then
-	BACKUP_DIR="$RET"
 fi
 
 # Only setup config if there's none.
@@ -61,7 +43,5 @@ fi
 ln -s /usr/share/backup-scripts /usr/share/offsite-backup
 
 #DEBHELPER#
-
-db_stop
 
 exit 0

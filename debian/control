@@ -16,7 +16,7 @@ Description: Set of scripts to help backups
 
 Package: offsite-backup
 Architecture: all
-Depends: rdiff-backup, python-pylibacl, python-pyxattr, debconf, ${misc:Depends}, backup-scripts
+Depends: rdiff-backup, python-pylibacl, python-pyxattr, ${misc:Depends}, backup-scripts
 Description: Set up off-site backups
  offsite-backup allows you to quickly set up a working configuration for
  backups to an off-site backup server.  It provides very little functionality
@@ -27,7 +27,7 @@ Description: Set up off-site backups
 
 Package: local-backup
 Architecture: all
-Depends: rdiff-backup, python-pylibacl, python-pyxattr, debconf, ${misc:Depends}, backup-scripts
+Depends: rdiff-backup, python-pylibacl, python-pyxattr, ${misc:Depends}, backup-scripts
 Description: Set up local backups
  Local-backup allows you to quickly set up a working configuration for
  backups to a local location.  It provides very little functionality
