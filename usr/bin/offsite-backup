@@ -24,6 +24,7 @@ repair=0
 list=0
 enable_splay=0
 config=/etc/backup/offsite-backup.conf
+listfile=/tmp/backuplist
 
 usage ()
 {
@@ -108,7 +109,19 @@ repair ()
 # List all increments
 list ()
 {
-	rdiff-backup --list-increments $extra_opts "$destination"
+	if [ ! -e "$listfile" ]; then create_list; fi
+	cat $listfile
+}
+
+# Create the listfile
+create_list()
+{
+	if [ -w "$listfile" ] || [ ! -e "$listfile" ]; then
+		echo "[$(date)] Getting new list info" >> "$LOG"
+		rdiff-backup --list-increments $extra_opts "$destination" > $listfile
+	else
+		echo "Cannot write to $listfile, but update was requested. Continuing without update." | tee -a "$LOG"
+	fi
 }
 
 if [ $enable_splay -eq 1 ] && [ $SPLAY -ne 0 ]; then
@@ -145,6 +158,7 @@ rdiff-backup $extra_opts \
              --exclude '**' / "$destination" 2>&1 | tee -a "$LOG"
 
 cleanup
+create_list
 
 # Execute the backup finish scripts.
 echo "[$(date)] Running backup finish scripts" >> "$LOG"
