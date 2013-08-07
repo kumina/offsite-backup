@@ -118,7 +118,7 @@ create_list()
 {
 	if [ -w "$listfile" ] || [ ! -e "$listfile" ]; then
 		echo "[$(date)] Getting new list info" >> "$LOG"
-		rdiff-backup --list-increments $extra_opts "$destination" > $listfile
+		rdiff-backup --list-increments "$destination" > $listfile
 	else
 		echo "Cannot write to $listfile, but update was requested. Continuing without update." | tee -a "$LOG"
 	fi
