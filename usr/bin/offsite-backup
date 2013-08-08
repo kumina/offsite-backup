@@ -89,6 +89,17 @@ alias rdiff-backup="rdiff-backup --terminal-verbosity $VERBOSITY \
    --remote-schema 'ssh -i $SSH_PRIVATE_KEY -C \%s rdiff-backup --server'"
 destination="$BACKUP_USER@$BACKUP_SERVER::$BACKUP_DIR"
 
+# Create the listfile
+create_list()
+{
+	if [ -w "$listfile" ] || [ ! -e "$listfile" ]; then
+		echo "[$(date)] Getting new list info" >> "$LOG"
+		rdiff-backup --list-increments "$destination" > $listfile
+	else
+		echo "Cannot write to $listfile, but update was requested. Continuing without update." | tee -a "$LOG"
+	fi
+}
+
 # Remove increments older than $REMOVE_OLDER_THAN.
 cleanup ()
 {
@@ -104,6 +115,7 @@ cleanup ()
 repair ()
 {
 	rdiff-backup --force --check-destination-dir "$destination" 2>&1 | tee -a "$LOG"
+	create_list
 }
 
 # List all increments
@@ -111,17 +123,6 @@ list ()
 {
 	if [ ! -e "$listfile" ]; then create_list; fi
 	cat $listfile
-}
-
-# Create the listfile
-create_list()
-{
-	if [ -w "$listfile" ] || [ ! -e "$listfile" ]; then
-		echo "[$(date)] Getting new list info" >> "$LOG"
-		rdiff-backup --list-increments "$destination" > $listfile
-	else
-		echo "Cannot write to $listfile, but update was requested. Continuing without update." | tee -a "$LOG"
-	fi
 }
 
 if [ $enable_splay -eq 1 ] && [ $SPLAY -ne 0 ]; then
