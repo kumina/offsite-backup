@@ -121,7 +121,7 @@ repair ()
 # List all increments
 list ()
 {
-	if [ ! -e "$listfile" ]; then create_list; fi
+	if [ ! -e "$listfile" ] || test `/usr/bin/find $listfile -mtime +1`; then create_list; fi
 	cat $listfile
 }
 
