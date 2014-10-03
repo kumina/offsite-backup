@@ -106,7 +106,7 @@ cleanup ()
 	echo "\n[$(date)] Removing backups older than $REMOVE_OLDER_THAN" >> "$LOG"
 	extra_opts="$1"
 	if [ -n "$REMOVE_OLDER_THAN" ]; then
-		rdiff-backup $extra_opts --remove-older-than "$REMOVE_OLDER_THAN" \
+		rdiff-backup $extra_opts --force --remove-older-than "$REMOVE_OLDER_THAN" \
 		              "$destination" 2>&1 | tee -a "$LOG"
 	fi
 }
@@ -137,7 +137,7 @@ if [ $enable_splay -eq 1 ] && [ $SPLAY -ne 0 ]; then
 fi
 
 if [ $cleanup -eq 1 ]; then
-	cleanup --force; exit
+	cleanup; exit
 elif [ $repair -eq 1 ]; then
 	repair; exit
 elif [ $list -eq 1 ]; then
