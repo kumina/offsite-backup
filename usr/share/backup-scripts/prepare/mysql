@@ -18,14 +18,49 @@ chmod 2750 /var/backups/mysql
 # Remove old backups completely.
 rm -rf /var/backups/mysql/*
 
-# Get the databases defined in MySQL. Disregard the information_schema database.
-DBS=`/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e "show databases\G" \
-     | /bin/grep -v ^* | /usr/bin/awk '{print $2}' | /bin/grep -v ^information_schema$ \
-     | /bin/grep -v ^performance_schema$`
+# Convenience var
+MYSQL='/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -BNe'
+
+# Determine MySQL version
+MAJVERSION=`$MYSQL "SELECT @@GLOBAL.version" | cut -d. -f1`
+MINVERSION=`$MYSQL "SELECT @@GLOBAL.version" | cut -d. -f2`
+
+# Get the databases defined in MySQL. Disregard schemas we're not interested in.
+DBS=`$MYSQL "
+SELECT schema_name
+FROM information_schema.schemata
+WHERE schema_name NOT LIKE '#%'
+AND schema_name <> 'lost+found'
+AND schema_name <> 'information_schema'
+AND schema_name <> 'performance_schema'"`
+
+# Some defaults
+GTID_OPTION=''
+
+# Some specific version-based controls
+if [ $MAJVERSION -eq 5 ]; then
+	# If we have a 5.6+ server, we need to check if GTIDs are enabled
+	if [ $MINVERSION -gt 5 ]; then
+		GTID_MODE=`$MYSQL "SELECT @@GLOBAL.gtid_mode"`
+		if [ $GTID_MODE = 'ON' ]; then
+			GTID_OPTION='--set-gtid-purged=OFF'
+		fi
+	fi
+fi
 
 # Actually backup each database.
 for db in $DBS; do
-/usr/bin/mysqldump --defaults-file=/etc/mysql/debian.cnf --routines --opt --max-allowed-packet=1G \
-	--ignore-table=mysql.event --force --quote-names --quick $db | \
-	/bin/gzip -9 --rsyncable > /var/backups/mysql/$db.sql.gz
+	INNODB=`$MYSQL "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA='$db' AND ENGINE='InnoDB'"`
+	NONINNODB=`$MYSQL "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA='$db' AND ENGINE <> 'InnoDB' AND TABLE_TYPE='BASE TABLE'
+	                   AND NOT (TABLE_SCHEMA='mysql' AND (TABLE_NAME='event' OR TABLE_NAME='slow_log' OR TABLE_NAME='general_log'))"`
+	if [ ! -z "$INNODB" ]; then
+		# We have InnoDB tables, dump them nicely
+		/usr/bin/mysqldump --defaults-file=/etc/mysql/debian.cnf --routines --opt --max-allowed-packet=1G --ignore-table=mysql.event --quote-names \
+				   --single-transaction $GTID_OPTION $db $INNODB | /bin/gzip -9 --rsyncable > /var/backups/mysql/$db-innodb.sql.gz
+	fi
+	if [ ! -z "$NONINNODB" ]; then
+		# We have non-InnoDB tables, dump them less nicely...
+		/usr/bin/mysqldump --defaults-file=/etc/mysql/debian.cnf --routines --opt --max-allowed-packet=1G --ignore-table=mysql.event --force \
+				   --quote-names $GTID_OPTION $db $NONINNODB | /bin/gzip -9 --rsyncable > /var/backups/mysql/$db-non-innodb.sql.gz
+	fi
 done
