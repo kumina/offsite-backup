@@ -1,4 +1,4 @@
-offsite-backup (1.3.5-KUMIRELEASE0.1) stable; urgency=low
+offsite-backup (1.3.5+KUMIRELEASE1) stable; urgency=low
 
   * change mysql backup scripts to account for views (and other objects)
 
