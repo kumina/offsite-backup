@@ -53,6 +53,8 @@ for db in $DBS; do
 	INNODB=`$MYSQL "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA='$db' AND ENGINE='InnoDB'"`
 	NONINNODB=`$MYSQL "SELECT TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA='$db' AND ENGINE <> 'InnoDB' AND TABLE_TYPE='BASE TABLE'
 	                   AND NOT (TABLE_SCHEMA='mysql' AND (TABLE_NAME='event' OR TABLE_NAME='slow_log' OR TABLE_NAME='general_log'))"`
+	OTHERS=`$MYSQL "SELECT TABLE_NAME FROM information_schema.TABLES where TABLE_SCHEMA='$db' AND ( ENGINE <> 'InnoDB' OR ENGINE IS NULL ) AND TABLE_TYPE <> 'BASE TABLE'"`
+
 	if [ ! -z "$INNODB" ]; then
 		# We have InnoDB tables, dump them nicely
 		/usr/bin/mysqldump --defaults-file=/etc/mysql/debian.cnf --routines --opt --max-allowed-packet=1G --ignore-table=mysql.event --quote-names \
@@ -63,4 +65,9 @@ for db in $DBS; do
 		/usr/bin/mysqldump --defaults-file=/etc/mysql/debian.cnf --routines --opt --max-allowed-packet=1G --ignore-table=mysql.event --force \
 				   --quote-names $GTID_OPTION $db $NONINNODB | /bin/gzip -9 --rsyncable > /var/backups/mysql/$db-non-innodb.sql.gz
 	fi
+        if [ ! -z "$OTHERS" ]; then
+                # We have other things (views?)
+                /usr/bin/mysqldump --defaults-file=/etc/mysql/debian.cnf --routines --opt --max-allowed-packet=1G --ignore-table=mysql.event --force \
+                                   --quote-names $GTID_OPTION $db $OTHERS | /bin/gzip -9 --rsyncable > /var/backups/mysql/$db-misc.sql.gz
+        fi
 done
